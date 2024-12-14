@@ -1,0 +1,15 @@
+{
+  "type": "code",
+  "modid": "expandedroomslib",
+  "name": "Expanded Rooms Library",
+  "authors": [
+    "TheInsanityGod"
+  ],
+  "description": "A library mod for expanding room behavior",
+  "version": "0.5.0",
+  "dependencies": {
+    "game": ""
+  },
+  "Side": "Server",
+  "RequiredOnClient": false 
+}
