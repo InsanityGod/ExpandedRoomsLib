@@ -55,4 +55,8 @@
   </Content>
 </ItemGroup>
 
+<ItemGroup>
+  <Folder Include="Code\Behaviors\Temperature\" />
+</ItemGroup>
+
 </Project>

@@ -9,7 +9,5 @@
   "version": "0.5.0",
   "dependencies": {
     "game": ""
-  },
-  "Side": "Server",
-  "RequiredOnClient": false 
+  }
 }

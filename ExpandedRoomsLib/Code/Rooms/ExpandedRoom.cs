@@ -1,11 +1,13 @@
-﻿using System;
+﻿using ExpandedRoomsLib.Code.Rooms.Behaviors;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vintagestory.API.Common;
 using Vintagestory.GameContent;
 
-namespace ExpandedRoomsLib
+namespace ExpandedRoomsLib.Code.Rooms
 {
     /// <summary>
     /// This room is purely server side only, interaction with it should be done server side and then synced to client if needed
@@ -17,20 +19,22 @@ namespace ExpandedRoomsLib
         internal List<ExpandedRoom> expandedRooms = new();
 
         public T GetBehavior<T>() where T : RoomBehavior => RoomBehaviors.OfType<T>().FirstOrDefault();
-
-        internal void Initialize()
+        
+        public ICoreAPI Api { get; private set; }
+        internal void Initialize(ICoreAPI api)
         {
-            foreach(var behaviorType in ExpandedRoomsLibModSystem.Instance.roomBehaviorTypes)
+            Api = api;
+            foreach (var behaviorType in ExpandedRoomsLibModSystem.RoomBehaviorTypes)
             {
                 try
                 {
                     var behavior = (RoomBehavior)Activator.CreateInstance(behaviorType);
                     RoomBehaviors.Add(behavior);
-                    behavior.Initialize(ExpandedRoomsLibModSystem.Instance.ServerApi);
+                    behavior.Initialize(ExpandedRoomsLibModSystem.ServerApi, this);
                 }
-                catch(Exception ex) 
+                catch (Exception ex)
                 {
-                    ExpandedRoomsLibModSystem.Instance.ServerApi.Logger.Error($"Failed to initialize room behavior {behaviorType.Name}: {ex}");
+                    ExpandedRoomsLibModSystem.ServerApi.Logger.Error($"Failed to initialize room behavior {behaviorType.Name}: {ex}");
                 }
             }
 
@@ -44,10 +48,22 @@ namespace ExpandedRoomsLib
         /// </summary>
         internal int removalCount;
 
+        public int Volume;
+
+        public int SurfaceCount;
+
+        public ExpandedRoom()
+        {
+            //TODO remove
+        }
+
+        public bool IsDisposed { get; protected set; }
+
         internal void Dispose()
         {
-            foreach(var behavior in RoomBehaviors) behavior.Dispose();
+            foreach (var behavior in RoomBehaviors) behavior.Dispose();
 
+            IsDisposed = true;
             Console.WriteLine("An expanded room has been disposed"); //TODO remove
         }
     }

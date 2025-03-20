@@ -7,12 +7,18 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.Server;
 
-namespace ExpandedRoomsLib
+namespace ExpandedRoomsLib.Code.Rooms.Behaviors
 {
     public abstract class RoomBehavior
     {
-        public ICoreServerAPI Api { get; protected set; }
-        public virtual void Initialize(ICoreServerAPI api) => Api = api;
+        public ICoreServerAPI Api { get; private set; }
+
+        public ExpandedRoom ExpandedRoom { get; private set; }
+        public virtual void Initialize(ICoreServerAPI api, ExpandedRoom expandedRoom)
+        {
+            Api = api;
+            ExpandedRoom = expandedRoom;
+        }
 
 
         /// <summary>
